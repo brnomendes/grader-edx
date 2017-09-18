@@ -22,24 +22,27 @@ No arquivo xqueue.env.json deve ser adicionado o nome da fila, por exemplo py-qu
 ### Configuração e Execução do Avaliador
 Criar ambiente virtual Python para isolar as dependências:
 ```bash
+$ git clone https://github.com/brnomendes/grader-edx.git
+$ cd grader-edx/
+$
 $ sudo pip install virtualenv
 $ virtualenv -p python3 venv # Criar o Ambiente Virtual venv
 $ . venv/bin/activate # Utilizar o Ambiente Virtual venv
-```
-**Instalar as dependências**:
-```bash
-$ git clone https://github.com/brnomendes/grader-edx.git
-$ cd grader-edx/
-$ pip install -r requirements.txt
+$
+(venv)$ pip install -r requirements.txt
 ```
 
 **Configurando Banco de Dados**:
 
-Variáveis de ambiente a serem configuradas: GRADER_HOST, GRADER_USER, GRADER_PASSWORD e GRADER_DATABASE
+Variáveis de ambiente a serem configuradas: 
+ - GRADER_HOST
+ - GRADER_USER
+ - GRADER_PASSWORD
+ - GRADER_DATABASE
 
 **Iniciando o Avaliador**:
 ```bash
-$ python3 main.py
+(venv)$ ./start.sh
 ```
 
 ### Criando Exercício para o Avaliador Externo
