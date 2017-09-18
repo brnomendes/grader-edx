@@ -20,7 +20,7 @@ No arquivo xqueue.env.json deve ser adicionado o nome da fila, por exemplo py-qu
 *Necessário reniciar a máquina edX após a mudança.
 
 ### Configuração e Execução do Avaliador
-Opcionalmente pode ser criado um ambiente virtual Python para isolar as dependências:
+Criar ambiente virtual Python para isolar as dependências:
 ```bash
 $ sudo pip install virtualenv
 $ virtualenv -p python3 venv # Criar o Ambiente Virtual venv
@@ -35,11 +35,7 @@ $ pip install -r requirements.txt
 
 **Configurando Banco de Dados**:
 
-Variáveis de ambiente a serem configuradas: GRADER_HOST, GRADER_USER, GRADER_PASSWORD
-
-```bash
-$ mysql -u USER -p < database.sql
-```
+Variáveis de ambiente a serem configuradas: GRADER_HOST, GRADER_USER, GRADER_PASSWORD e GRADER_DATABASE
 
 **Iniciando o Avaliador**:
 ```bash
