@@ -4,6 +4,7 @@ import untangle
 from Models.TestResult import TestResult
 from Models.Submission import Submission
 from Database import Database
+from Scorer import Scorer
 from Utils import Utils
 
 
@@ -13,11 +14,15 @@ class Grader():
         self.session = Database.session()
 
     def run(self, submission):
-        submissions = Submission.get_last_submissions_each_user()
+        submissions = Submission.get_last_submissions_each_user(submission.student_id)
         for s in submissions:
             test_result = self.run_test(submission, s)
+            sc = Scorer(submission.student_id, s.student_id, test_result)
+            sc.start()
             if not s.id == submission.id:
                 test_result = self.run_test(s, submission)
+                sc = Scorer(s.student_id, submission.student_id, test_result)
+                sc.start()
        
 
     def run_test(self, submission_program, submission_test):

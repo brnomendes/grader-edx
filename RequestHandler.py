@@ -2,6 +2,7 @@ import json
 import datetime
 from Models.Submission import Submission
 from Database import Database
+from Scorer import Scorer
 from Grader import Grader
 from Parser import Parser
 
@@ -32,6 +33,8 @@ class RequestHandler():
         session = Database.session()
         program, test = Parser.parse(student_response)
         new_submission = Submission(datetime.datetime.now(), anonymous_student_id, program, test)
+        if Submission.get_submission_user(new_submission.student_id):
+            Scorer.resubmission_score(new_submission.student_id, -100)
         session.add(new_submission)
         session.commit()
         session.expunge(new_submission)
@@ -41,6 +44,4 @@ class RequestHandler():
 
     @staticmethod
     def response():
-        response = {"correct": True, "score": 0, "msg": "Ok!"}
-        response = json.dumps(response)
-        return response.encode('utf-8')
+        return {"correct": True, "score": 0, "msg": "Submissão Recebida"}
