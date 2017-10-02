@@ -14,7 +14,7 @@ class Grader():
         self.session = Database.session()
 
     def run(self, submission):
-        submissions = Submission.get_last_submissions_each_user(submission.student_id)
+        submissions = Submission.get_last_submissions_each_user(submission.student_id, submission.problem_id)
         for s in submissions:
             test_result = self.run_test(submission, s)
             sc = Scorer(submission.student_id, s.student_id, test_result)

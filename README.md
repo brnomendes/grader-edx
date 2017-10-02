@@ -55,7 +55,17 @@ Exemplo de exercício. Deve ser indicado o nome da fila do avaliador no parâmet
 
   <coderesponse queuename="py-queue">
     <textbox mode="python" tabsize="4"/>
-    <codeparam></codeparam>
+
+    <codeparam>
+        <initial_display>
+        def foo(x, y):
+            pass
+
+        def test_foo():
+            pass
+        </initial_display>
+        <grader_payload>unique_name_of_problem</grader_payload>
+    </codeparam>
   </coderesponse>
 </problem>
 ```
