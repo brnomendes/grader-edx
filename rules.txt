@@ -1,7 +1,0 @@
-Resubmissão: -100
-CASO NÃO OCORRA ERRO:
-	Se o programar passar sem falhas: +10
-	Se o programa houver falhas: -2 (por falha)
-	Se não passar no proprio teste: -50 (por falha)
-	
-	Cobertura de código do teste: +10 * cov (cov varia de 0 a 1)

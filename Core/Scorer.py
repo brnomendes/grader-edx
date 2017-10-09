@@ -1,5 +1,5 @@
 import threading
-from Database import Database
+from Core.Database import Database
 from Models.Score import Score
 
 

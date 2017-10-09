@@ -1,10 +1,10 @@
 import json
 import datetime
 from Models.Submission import Submission
-from Database import Database
-from Scorer import Scorer
-from Grader import Grader
-from Parser import Parser
+from Core.Database import Database
+from Core.Scorer import Scorer
+from Core.Grader import Grader
+from Core.Parser import Parser
 
 
 class RequestHandler():
