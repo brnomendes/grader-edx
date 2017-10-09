@@ -29,6 +29,13 @@ class Scorer(threading.Thread):
             self.increase_score(s_test, +10 * self.test_result.coverage)
 
 
+    def increase_score(self, s, increase):
+        s.score = s.score + increase
+        if s.score < 0:
+            s.score = 0
+        self.session.commit()
+
+
     def get_score(self, student_id):
         s = self.session.query(Score).filter(Score.student_id == student_id).first()
         if not s:
@@ -36,17 +43,13 @@ class Scorer(threading.Thread):
         else:
             return s
 
+
     def create_new_score(self, student_id, score):
         s = Score(student_id, score)
         self.session.add(s)
         self.session.commit()
         return s
 
-    def increase_score(self, s, increase):
-        s.score = s.score + increase
-        if s.score < 0:
-            s.score = 0
-        self.session.commit()
 
     @staticmethod
     def resubmission_score(student_id, increase):

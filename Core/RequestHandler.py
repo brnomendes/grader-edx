@@ -1,10 +1,5 @@
 import json
-import datetime
-from Models.Submission import Submission
-from Core.Database import Database
-from Core.Scorer import Scorer
 from Core.Grader import Grader
-from Core.Parser import Parser
 
 
 class RequestHandler():
@@ -12,9 +7,8 @@ class RequestHandler():
     @staticmethod
     def process(data):
         anonymous_student_id, student_response, problem_id = RequestHandler.process_data(data)
-        submission = RequestHandler.save_submission(anonymous_student_id, student_response, problem_id)
-        Grader().run(submission)
-        return RequestHandler.response()
+        correct, msg = Grader().run(anonymous_student_id, student_response, problem_id)
+        return RequestHandler.response(correct, msg)
 
 
     @staticmethod
@@ -30,19 +24,5 @@ class RequestHandler():
 
 
     @staticmethod
-    def save_submission(anonymous_student_id, student_response, problem_id):
-        session = Database.session()
-        program, test = Parser.parse(student_response)
-        new_submission = Submission(datetime.datetime.now(), anonymous_student_id, problem_id, program, test)
-        if Submission.get_submission_user(new_submission.student_id, problem_id):
-            Scorer.resubmission_score(new_submission.student_id, -100)
-        session.add(new_submission)
-        session.commit()
-        session.expunge(new_submission)
-        session.close()
-        return new_submission
-
-
-    @staticmethod
-    def response():
-        return {"correct": True, "score": 0, "msg": "Submissão Recebida"}
+    def response(correct, msg):
+        return {"correct": True, "score": 1, "msg": msg}
