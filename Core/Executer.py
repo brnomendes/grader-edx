@@ -56,7 +56,6 @@ class Executer:
         Utils.delete_file(filename, ".xml")
         return root
 
-
     @staticmethod
     def get_fail_messages(untangle_root):
         msgs = []

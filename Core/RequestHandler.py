@@ -10,7 +10,6 @@ class RequestHandler():
         correct, msg = Grader().run(anonymous_student_id, student_response, problem_id)
         return RequestHandler.response(correct, msg)
 
-
     @staticmethod
     def process_data(data):
         json_object = json.loads(data.decode("utf-8"))
@@ -21,7 +20,6 @@ class RequestHandler():
         problem_id = json_object["grader_payload"]
 
         return anonymous_student_id, student_response, problem_id
-
 
     @staticmethod
     def response(correct, msg):

@@ -9,7 +9,6 @@ class Utils():
         file.write(content)
         file.close()
 
-
     @staticmethod
     def delete_file(filename, extension):
         os.remove("".join([filename, extension]))

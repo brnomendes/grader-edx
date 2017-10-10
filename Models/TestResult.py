@@ -4,6 +4,8 @@ from sqlalchemy import Column, Integer, Float
 
 
 Base = declarative_base()
+
+
 class TestResult(Base):
     __tablename__ = 'testresults'
 
@@ -16,7 +18,6 @@ class TestResult(Base):
     coverage = Column(Float)
     time = Column(Integer)
 
-
     def __init__(self, submission_id_program, submission_id_test, tests, errors, failures, coverage, time):
         self.submission_id_program = submission_id_program
         self.submission_id_test = submission_id_test
@@ -25,6 +26,7 @@ class TestResult(Base):
         self.failures = failures
         self.coverage = coverage
         self.time = time
+
 
 session = Database.session(Base)
 session.close()

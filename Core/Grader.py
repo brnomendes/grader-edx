@@ -36,7 +36,6 @@ class Grader():
         sc.start()
         return fail_messages
 
-
     def save_submission(self, anonymous_student_id, student_response, problem_id):
         program, test = Parser.parse(student_response)
         new_submission = Submission(datetime.datetime.now(), anonymous_student_id, problem_id, program, test, False)
@@ -55,7 +54,6 @@ class Grader():
         self.session.close()
 
         return new_submission
-
 
     def response(self, correct=True):
         if not correct:

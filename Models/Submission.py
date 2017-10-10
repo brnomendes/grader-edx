@@ -4,6 +4,8 @@ from sqlalchemy import Column, Integer, String, Text, DateTime, Boolean, desc
 
 
 Base = declarative_base()
+
+
 class Submission(Base):
     __tablename__ = 'submissions'
 
@@ -15,7 +17,6 @@ class Submission(Base):
     test = Column(Text)
     error = Column(Boolean)
 
-
     def __init__(self, timestamp, student_id, problem_id, program, test, error):
         self.timestamp = timestamp
         self.student_id = student_id
@@ -23,7 +24,6 @@ class Submission(Base):
         self.program = program
         self.test = test
         self.error = error
-
 
     @staticmethod
     def get_last_submissions_each_user(problem_id):
@@ -45,6 +45,7 @@ class Submission(Base):
         s = session.query(Submission).filter(Submission.student_id == student_id, Submission.problem_id == problem_id).first()
         session.close()
         return s
+
 
 session = Database.session(Base)
 session.close()
