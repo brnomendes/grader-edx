@@ -1,0 +1,11 @@
+
+O avaliador externo oferece uma interface HTTP que fornece o ranking dos
+alunos. Acessando, por exemplo, com:
+GET http://localhost:1710/score
+
+Utilizando o framework Flask e a biblioteca requests, este exemplo mostra como
+consumir o Json de ranking e exibir em uma página.
+
+A página de ranking pode ser adicionada como uma aba nos cursos do Open edX. O
+seguinte link contém um tutorial de como criar abas no Open edX:
+http://www.bedjango.com/blog/-how-create-tab-open-edx/

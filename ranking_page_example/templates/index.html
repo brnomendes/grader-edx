@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+
+<img class="rounded img-fluid mx-auto d-block" src="{{ url_for('static', filename='Cover_Ranking.png') }}" width="40%" height="40%">
+
+<table class="table">
+    <thead class="thead">
+        <tr>
+            <th>Posição</th>
+            <th>Aluno</th>
+            <th>Quantidade de Submissões</th>
+            <th>Pontuação</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for score in scores %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ score['student_id'] }}</td>
+                <td>{{ score['submissions'] }}</td>
+                <td>{{ score['score'] }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</body>
+</html>
