@@ -16,12 +16,5 @@ class Score(Base):
         self.student_id = student_id
         self.score = score
 
-    @staticmethod
-    def get_all():
-        session = Database.session()
-        s = session.query(Score).all()
-        session.close()
-        return s
-
 session = Database.session(Base)
 session.close()

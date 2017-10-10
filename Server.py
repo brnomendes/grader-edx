@@ -1,6 +1,6 @@
 from Core.RequestHandler import RequestHandler
 from flask import Flask, request, jsonify
-from Models.Score import Score
+from Core.Ranking import Ranking
 
 app = Flask("external-grader")
 app.config["DEBUG"] = True
@@ -13,7 +13,7 @@ def post():
 
 @app.route("/score", methods=["GET"])
 def get_score():
-    return jsonify([{"student_id": s.student_id, "score": s.score} for s in Score.get_all()])
+    return jsonify(Ranking.get_all())
 
 
 if __name__ == "__main__":

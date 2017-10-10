@@ -59,11 +59,11 @@ class Grader():
 
     def response(self, correct=True):
         if not correct:
-            title = "<h3 style='color:red'><strong>Erro Encontrado no Código.</strong></h3>"
+            title = "<h3 style='color:red'><strong>Erro encontrado no Código.</strong></h3>"
             msg = "<p>Execute localmente em sua máquina os testes do seu programa antes de submetê-lo.</p>"
             return False, "\n".join([title, msg])
 
-        title = "<h3><strong>Submissão Aceita e Pontuada.</strong></h3>"
+        title = "<h3><strong>Submissão aceita e pontuada.</strong></h3>"
         if self.fail_messages:
             if len(self.fail_messages) > 1:
                 msg = "<p>Os casos de testes de {} alunos encontraram falhas no seu programa.</p>\n".format(len(self.fail_messages))
