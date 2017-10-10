@@ -24,6 +24,7 @@ class Scorer(threading.Thread):
                     if self.student_id_program == self.student_id_test:
                         self.increase_score(s_program, -50)
                     else:
+                        self.increase_score(s_test, +2)
                         self.increase_score(s_program, -2)
 
             self.increase_score(s_test, +10 * self.test_result.coverage)
