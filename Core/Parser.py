@@ -10,6 +10,8 @@ class Parser():
         for line in lines:
             if line.startswith("def test_"):
                 in_test = True
+            elif in_test and not line.startswith((" ", "\t")):
+                in_test = False
 
             if in_test:
                 test = test + line
