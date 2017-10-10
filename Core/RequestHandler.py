@@ -25,4 +25,4 @@ class RequestHandler():
 
     @staticmethod
     def response(correct, msg):
-        return {"correct": True, "score": 1, "msg": msg}
+        return {"correct": correct, "score": 1, "msg": msg}

@@ -59,5 +59,9 @@ class Executer:
 
     @staticmethod
     def get_fail_messages(untangle_root):
-        return [test.get_elements('failure')[0]['message'] for test in
-            untangle_root.testsuite.children if test.get_elements('failure')]
+        msgs = []
+        for test in untangle_root.testsuite.children:
+            if test.get_elements('failure'):
+                msg = test.get_elements('failure')[0].cdata
+                msgs.append(msg.replace(msg.split('\n')[-1], ""))
+        return msgs
