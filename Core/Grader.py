@@ -70,7 +70,7 @@ class Grader():
             else:
                 msg = "<p>Os casos de testes de 1 aluno encontrou falhas no seu programa.</p>\n"
 
-            fail_msg = "<p style='color:red;'>{}</p>".format(list(self.fail_messages.values())[0][0])
+            fail_msg = "<pre style='color:red;'>{}</pre>".format(list(self.fail_messages.values())[0][0])
             msg = "".join([msg, "<p><strong>Mensagem de falha:</strong></p>", fail_msg])
         else:
             msg = "<p>Não foram encontradas falhas no seu programa por outros alunos.</p>"
