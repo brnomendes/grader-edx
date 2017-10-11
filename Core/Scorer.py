@@ -17,22 +17,23 @@ class Scorer(threading.Thread):
         s_test = self.get_score(self.student_id_test)
 
         if not self.test_result.errors:
+            if self.student_id_program == self.student_id_test:
+                for failure in range(self.test_result.failures):
+                    self.increase_score(s_program, -50)
+                self.session.close()
+                return
+
             if not self.test_result.failures:
                 self.increase_score(s_program, +10)
             else:
                 for failure in range(self.test_result.failures):
-                    if self.student_id_program == self.student_id_test:
-                        self.increase_score(s_program, -50)
-                    else:
-                        self.increase_score(s_test, +2)
-                        self.increase_score(s_program, -2)
-
+                    self.increase_score(s_test, +2)
+                    self.increase_score(s_program, -2)
             self.increase_score(s_test, +10 * self.test_result.coverage)
+        self.session.close()
 
     def increase_score(self, s, increase):
         s.score = s.score + increase
-        if s.score < 0:
-            s.score = 0
         self.session.commit()
 
     def get_score(self, student_id):
