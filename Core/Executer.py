@@ -15,7 +15,12 @@ class Executer:
         import_line = "".join(["from ", p_filename, " import *\n"])
         Utils.write_to_file(t_filename, ".py", "".join([import_line, submission_test.test]))
 
-        p = subprocess.Popen(["pytest", t_filename + ".py", "-q", "--junitxml=result-" + submission_program.student_id + ".xml", "--cov=" + p_filename, "--cov-report=xml:cov-" + submission_program.student_id + ".xml"], stdout=subprocess.DEVNULL)
+        p = subprocess.Popen(["pytest", "{}.py".format(t_filename), "-q",
+            "--junitxml=result-{}{}".format(submission_program.student_id, ".xml"),
+            "--cov={}".format(p_filename),
+            "--cov-report=xml:cov-{}{}".format(submission_program.student_id, ".xml")],
+            stdout=subprocess.DEVNULL)
+
         p.wait()
 
         Utils.delete_file(p_filename, ".py")
