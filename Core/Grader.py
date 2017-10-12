@@ -10,30 +10,29 @@ class Grader():
 
     def __init__(self):
         self.session = Database.session()
-        self.fail_messages = {}
 
     def run(self, anonymous_student_id, student_response, problem_id):
         submission = self.save_submission(anonymous_student_id, student_response, problem_id)
         if submission.error:
-            return self.response(False)
+            return Grader.response(False)
 
+        fail_messages = {}
         submissions = Submission.get_last_submissions_each_user(submission.problem_id)
         for s in submissions:
             messages = self.grader_execute(submission, s)
             if messages:
-                self.fail_messages[s.student_id] = messages
+                fail_messages[s.student_id] = messages
 
             if not s.id == submission.id:
                 self.grader_execute(s, submission)
 
-        return self.response()
+        return Grader.response(fail_messages=fail_messages)
 
     def grader_execute(self, submission_program, submission_test):
         test_result, fail_messages = Executer.run_test(submission_program, submission_test)
         self.session.add(test_result)
         self.session.commit()
-        sc = Scorer(submission_program.student_id, submission_test.student_id, test_result)
-        sc.start()
+        Scorer(submission_program.student_id, submission_test.student_id, test_result).start()
         return fail_messages
 
     def save_submission(self, anonymous_student_id, student_response, problem_id):
@@ -55,21 +54,22 @@ class Grader():
 
         return new_submission
 
-    def response(self, correct=True):
+    @staticmethod
+    def response(correct=True, fail_messages=None):
         if not correct:
             title = "<h3 style='color:red'><strong>Erro encontrado no Código.</strong></h3>"
             msg = "<p>Execute localmente em sua máquina os testes do seu programa antes de submetê-lo.</p>"
-            return False, "\n".join([title, msg])
-
-        title = "<h3><strong>Submissão aceita e pontuada.</strong></h3>"
-        if self.fail_messages:
-            if len(self.fail_messages) > 1:
-                msg = "<p>Os casos de testes de {} alunos encontraram falhas no seu programa.</p>\n".format(len(self.fail_messages))
-            else:
-                msg = "<p>Os casos de testes de 1 aluno encontrou falhas no seu programa.</p>\n"
-
-            fail_msg = "<pre style='color:red;'>{}</pre>".format(list(self.fail_messages.values())[0][0])
-            msg = "".join([msg, "<p><strong>Mensagem de falha:</strong></p>", fail_msg])
         else:
-            msg = "<p>Não foram encontradas falhas no seu programa por outros alunos.</p>"
-        return True, "\n".join([title, msg])
+            title = "<h3><strong>Submissão aceita e pontuada.</strong></h3>"
+
+            if fail_messages:
+                if len(fail_messages) > 1:
+                    msg = "<p>Os casos de testes de {} alunos encontraram falhas no seu programa.</p>".format(len(fail_messages))
+                else:
+                    msg = "<p>Os casos de testes de 1 aluno encontrou falhas no seu programa.</p>"
+                fail_msg = "<pre style='color:red;'>{}</pre>".format(list(fail_messages.values())[0][0])
+                msg = "{}<p><strong>Mensagem de falha:</strong></p>{}".format(msg, fail_msg)
+            else:
+                msg = "<p>Não foram encontradas falhas no seu programa por outros alunos.</p>"
+
+        return {"correct": correct, "score": 1, "msg": "{}\n{}".format(title, msg)}

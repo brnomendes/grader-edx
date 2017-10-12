@@ -5,13 +5,12 @@ from Core.Grader import Grader
 class RequestHandler():
 
     @staticmethod
-    def process(data):
-        anonymous_student_id, student_response, problem_id = RequestHandler.process_data(data)
-        correct, msg = Grader().run(anonymous_student_id, student_response, problem_id)
-        return RequestHandler.response(correct, msg)
+    def process_request(data):
+        anonymous_student_id, student_response, problem_id = RequestHandler.process_raw_data(data)
+        return Grader().run(anonymous_student_id, student_response, problem_id)
 
     @staticmethod
-    def process_data(data):
+    def process_raw_data(data):
         json_object = json.loads(data.decode("utf-8"))
         json_object = json.loads(json_object["xqueue_body"])
 
@@ -20,7 +19,3 @@ class RequestHandler():
         problem_id = json_object["grader_payload"]
 
         return anonymous_student_id, student_response, problem_id
-
-    @staticmethod
-    def response(correct, msg):
-        return {"correct": correct, "score": 1, "msg": msg}

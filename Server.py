@@ -8,7 +8,7 @@ app.config["DEBUG"] = True
 
 @app.route("/", methods=["POST"])
 def post():
-    return jsonify(RequestHandler.process(request.data))
+    return jsonify(RequestHandler.process_request(request.data))
 
 
 @app.route("/score", methods=["GET"])

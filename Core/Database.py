@@ -7,7 +7,7 @@ class Database:
 
     @staticmethod
     def session(Base=None):
-        connection_string = 'mysql+pymysql://%s:%s@%s:3306/%s' % (
+        connection_string = 'mysql+pymysql://{}:{}@{}:3306/{}'.format(
             os.environ['GRADER_USER'],
             os.environ['GRADER_PASSWORD'],
             os.environ['GRADER_HOST'],

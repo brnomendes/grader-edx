@@ -7,18 +7,18 @@ from Core.Utils import Utils
 class Executer:
 
     @staticmethod
-    def run_test(submission_program, submission_test):
-        p_filename = "".join(["program", submission_program.student_id])
-        Utils.write_to_file(p_filename, ".py", submission_program.program)
+    def run_test(s_program, s_test):
+        p_filename = "program{}".format(s_program.student_id)
+        Utils.write_to_file(p_filename, ".py", s_program.program)
 
-        t_filename = "".join(["test", submission_test.student_id])
-        import_line = "".join(["from ", p_filename, " import *\n"])
-        Utils.write_to_file(t_filename, ".py", "".join([import_line, submission_test.test]))
+        t_filename = "test{}".format(s_test.student_id)
+        import_line = "from {} import *\n".format(p_filename)
+        Utils.write_to_file(t_filename, ".py", "{}{}".format(import_line, s_test.test))
 
         p = subprocess.Popen(["pytest", "{}.py".format(t_filename), "-q",
-            "--junitxml=result-{}{}".format(submission_program.student_id, ".xml"),
+            "--junitxml=result-{}.xml".format(s_program.student_id),
             "--cov={}".format(p_filename),
-            "--cov-report=xml:cov-{}{}".format(submission_program.student_id, ".xml")],
+            "--cov-report=xml:cov-{}.xml".format(s_program.student_id)],
             stdout=subprocess.DEVNULL)
 
         p.wait()
@@ -26,14 +26,14 @@ class Executer:
         Utils.delete_file(p_filename, ".py")
         Utils.delete_file(t_filename, ".py")
 
-        tests, errors, failures, time, coverage, fail_messages = Executer.xml_process(submission_program.student_id, submission_test.student_id)
-        test_result = TestResult(submission_program.id, submission_test.id, tests, errors, failures, coverage, time)
+        tests, errors, failures, time, coverage, fail_messages = Executer.xml_process(s_program.student_id, s_test.student_id)
+        test_result = TestResult(s_program.id, s_test.id, tests, errors, failures, coverage, time)
 
         return test_result, fail_messages
 
     @staticmethod
     def xml_process(student_id_program, student_id_test):
-        x_filename = "".join(["result-", student_id_program])
+        x_filename = "result-{}".format(student_id_program)
         root = Executer.xml_parser(x_filename)
 
         tests = int(root.testsuite['tests'])
@@ -47,7 +47,7 @@ class Executer:
             if failures:
                 fail_messages = Executer.get_fail_messages(root)
 
-            c_filename = "".join(["cov-", student_id_program])
+            c_filename = "cov-{}".format(student_id_program)
             root = Executer.xml_parser(c_filename)
             coverage = float(root.coverage['line-rate'])
 
@@ -55,7 +55,7 @@ class Executer:
 
     @staticmethod
     def xml_parser(filename):
-        xml = open(filename + ".xml", "r")
+        xml = open("{}.xml".format(filename), "r")
         root = untangle.parse(xml.read())
         xml.close()
         Utils.delete_file(filename, ".xml")
