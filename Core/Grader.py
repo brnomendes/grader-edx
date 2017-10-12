@@ -9,7 +9,7 @@ from Core.Parser import Parser
 class Grader():
 
     def __init__(self):
-        self.session = Database.session()
+        self._session = Database.session()
 
     def run(self, anonymous_student_id, student_response, problem_id):
         submission = self._save_submission(anonymous_student_id, student_response, problem_id)
@@ -30,8 +30,8 @@ class Grader():
 
     def _grader_execute(self, submission_program, submission_test):
         test_result, fail_messages = Executer.run_test(submission_program, submission_test)
-        self.session.add(test_result)
-        self.session.commit()
+        self._session.add(test_result)
+        self._session.commit()
         Scorer(submission_program.student_id, submission_test.student_id, test_result).start()
         return fail_messages
 
@@ -47,10 +47,10 @@ class Grader():
 
         Scorer(None, None, None).get_score(new_submission.student_id)
 
-        self.session.add(new_submission)
-        self.session.commit()
-        self.session.expunge(new_submission)
-        self.session.close()
+        self._session.add(new_submission)
+        self._session.commit()
+        self._session.expunge(new_submission)
+        self._session.close()
 
         return new_submission
 
