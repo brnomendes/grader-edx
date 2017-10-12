@@ -6,11 +6,11 @@ class RequestHandler():
 
     @staticmethod
     def process_request(data):
-        anonymous_student_id, student_response, problem_id = RequestHandler.process_raw_data(data)
+        anonymous_student_id, student_response, problem_id = RequestHandler._process_raw_data(data)
         return Grader().run(anonymous_student_id, student_response, problem_id)
 
     @staticmethod
-    def process_raw_data(data):
+    def _process_raw_data(data):
         json_object = json.loads(data.decode("utf-8"))
         json_object = json.loads(json_object["xqueue_body"])
 

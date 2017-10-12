@@ -12,30 +12,30 @@ class Grader():
         self.session = Database.session()
 
     def run(self, anonymous_student_id, student_response, problem_id):
-        submission = self.save_submission(anonymous_student_id, student_response, problem_id)
+        submission = self._save_submission(anonymous_student_id, student_response, problem_id)
         if submission.error:
-            return Grader.response(False)
+            return Grader._response(False)
 
         fail_messages = {}
         submissions = Submission.get_last_submissions_each_user(submission.problem_id)
         for s in submissions:
-            messages = self.grader_execute(submission, s)
+            messages = self._grader_execute(submission, s)
             if messages:
                 fail_messages[s.student_id] = messages
 
             if not s.id == submission.id:
-                self.grader_execute(s, submission)
+                self._grader_execute(s, submission)
 
-        return Grader.response(fail_messages=fail_messages)
+        return Grader._response(fail_messages=fail_messages)
 
-    def grader_execute(self, submission_program, submission_test):
+    def _grader_execute(self, submission_program, submission_test):
         test_result, fail_messages = Executer.run_test(submission_program, submission_test)
         self.session.add(test_result)
         self.session.commit()
         Scorer(submission_program.student_id, submission_test.student_id, test_result).start()
         return fail_messages
 
-    def save_submission(self, anonymous_student_id, student_response, problem_id):
+    def _save_submission(self, anonymous_student_id, student_response, problem_id):
         program, test = Parser.parse(student_response)
         new_submission = Submission(datetime.datetime.now(), anonymous_student_id, problem_id, program, test, False)
         test_result, fail_messages = Executer.run_test(new_submission, new_submission)
@@ -55,7 +55,7 @@ class Grader():
         return new_submission
 
     @staticmethod
-    def response(correct=True, fail_messages=None):
+    def _response(correct=True, fail_messages=None):
         if not correct:
             title = "<h3 style='color:red'><strong>Erro encontrado no Código.</strong></h3>"
             msg = "<p>Execute localmente em sua máquina os testes do seu programa antes de submetê-lo.</p>"

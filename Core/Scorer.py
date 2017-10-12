@@ -19,31 +19,31 @@ class Scorer(threading.Thread):
         if not self.test_result.errors:
             if self.student_id_program == self.student_id_test:
                 for failure in range(self.test_result.failures):
-                    self.increase_score(s_program, -50)
+                    self._increase_score(s_program, -50)
                 self.session.close()
                 return
 
             if not self.test_result.failures:
-                self.increase_score(s_program, +10)
+                self._increase_score(s_program, +10)
             else:
                 for failure in range(self.test_result.failures):
-                    self.increase_score(s_test, +2)
-                    self.increase_score(s_program, -2)
-            self.increase_score(s_test, +10 * self.test_result.coverage)
+                    self._increase_score(s_test, +2)
+                    self._increase_score(s_program, -2)
+            self._increase_score(s_test, +10 * self.test_result.coverage)
         self.session.close()
 
-    def increase_score(self, s, increase):
+    def _increase_score(self, s, increase):
         s.score = s.score + increase
         self.session.commit()
 
     def get_score(self, student_id):
         s = self.session.query(Score).filter(Score.student_id == student_id).first()
         if not s:
-            return self.create_new_score(student_id, 0)
+            return self._create_new_score(student_id, 0)
         else:
             return s
 
-    def create_new_score(self, student_id, score):
+    def _create_new_score(self, student_id, score):
         s = Score(student_id, score)
         self.session.add(s)
         self.session.commit()
@@ -54,7 +54,5 @@ class Scorer(threading.Thread):
         session = Database.session()
         s = session.query(Score).filter(Score.student_id == student_id).first()
         s.score = s.score + increase
-        if s.score < 0:
-            s.score = 0
         session.commit()
         session.close()
